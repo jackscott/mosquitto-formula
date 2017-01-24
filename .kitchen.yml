@@ -1,0 +1,35 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: salt_solo
+  omnibus_cachier: true
+  
+  formula: mosquitto
+  pillars-from-files:
+    mosquitto.sls: pillar.example
+  pillars:
+    top.sls:
+      base:
+        "*":
+          - mosquitto
+  state_top:
+    base:
+      "*":
+        - mosquitto.debug
+        - mosquitto
+  grains:
+    roles:
+      - mosquitto-broker
+      
+      
+platforms:
+  - name: ubuntu-16.04
+  # - name: centos-7.2
+  # - name: debian-8.6
+  # - name: freebsd-10.3
+
+suites:
+  - name: default
+

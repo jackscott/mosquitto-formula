@@ -1,0 +1,23 @@
+{% from "mosquitto/defaults.yml" import rawmap with context %}
+
+{% set _x = salt['pillar.get']('mosquitto:lookup', grains.get('mosquitto:lookup', {})) %}
+{% set mosquitto = salt['grains.filter_by'](rawmap, merge=_x, base='default') %}
+
+{% with name = mosquitto.name % mosquitto %}
+
+{% set meta = {
+  'name': name,
+  'version': mosquitto.version,
+  'real_root': mosquitto.real_root % mosquitto,
+  'alt_root': mosquitto.alt_root % mosquitto
+  } %}
+
+{% do mosquitto.update({
+  'name': name,
+  'real_root': meta['real_root'],
+  'alt_root': meta['alt_root'],
+  'source_url': mosquitto.source_url % meta,
+  'meta': meta
+  })%}
+
+{% endwith %}

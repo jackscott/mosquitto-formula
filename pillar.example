@@ -1,0 +1,9 @@
+mosquitto:
+  lookup:
+    prefix: /opt/mqtt
+    log_dir: /opt/mqtt/logs
+    config_dir: /opt/mqtt/config
+    
+
+    
+    

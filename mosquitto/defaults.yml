@@ -1,0 +1,53 @@
+{% load_yaml as rawmap %}
+default:
+  user: mosquitto
+  service: mosquitto-broker
+  name: 'mosquitto-%(version)s'
+  prefix: /usr/local
+  config_dir: /etc/mosquitto
+  log_dir: /tmp/mosquitto/logs
+  data_dir: /tmp/mosquitto/data
+  
+  source_url: 'https://github.com/eclipse/mosquitto/archive/v%(version)s.tar.gz'
+  version: '1.4.10'
+  source_hash: 'sha256=8bc422f95eadc7edeaa7ad9586fc28907a9f03b9fa04e26306f04c441d60d21f'
+  deps: ~
+  pkg_name: ~
+  use_package: false
+  # either `upstart` or `systemd`
+  init_system: ~
+  # location of the daemon script to be generated
+  init_script: ~
+  # location of the environmental variables used by daemon
+  init_defaults: ~
+
+  real_root: "%(prefix)s/mosquitto-%(version)s"
+  alt_root: "%(prefix)s/mosquitto"
+  
+Debian:
+  pkg_name: mosquitto
+  deps:
+    - g++
+    - xsltproc
+    - docbook-xsl
+    - libc-ares-dev
+    - uuid-dev
+    - libwebsockets-dev
+    - libssl-dev
+CentOS: {}
+RedHat: {}
+{% endload %}
+
+
+# broker config is handled by adding the relevant items below, exactly as they
+# are defined in mosquitto.conf(5). Anything set in `broker` will be written to
+# <config_dir>/mosquitto.conf with the exception of `pid_file` and `user` 
+{% load_yaml as broker %}
+retry_interval: 20
+sys_interval: 10
+store_clean_interval: 10
+max_connections: -1
+port: 1883
+bind_address: ~
+protocol: mqtt
+{% endload %}
